@@ -23,9 +23,9 @@ if uploaded_file is not None:
             except:
                 df = pd.read_excel(xls, sheet_name=sheet, header=0)
             data[sheet] = df
-        return xls, data
+        return data
 
-    xls, dfs = load_excel(uploaded_file)
+    dfs = load_excel(uploaded_file)
     
     menu = st.sidebar.selectbox("Navegação", ["Painel / Início", "Clientes", "Atendimentos", "Orçamentos", "Modelos de Mensagens (WhatsApp)"])
     
@@ -39,11 +39,11 @@ if uploaded_file is not None:
         df_orc = dfs.get("ORÇAMENTOS", pd.DataFrame())
         
         with col1:
-            st.metric("Clientes Cadastrados", len(df_cli.dropna(subset=[df_cli.columns[0]])))
+            st.metric("Clientes Cadastrados", len(df_cli.dropna(subset=[df_cli.columns[0]])) if not df_cli.empty else 0)
         with col2:
-            st.metric("Atendimentos Registrados", len(df_atend.dropna(subset=[df_atend.columns[0]])))
+            st.metric("Atendimentos Registrados", len(df_atend.dropna(subset=[df_atend.columns[0]])) if not df_atend.empty else 0)
         with col3:
-            st.metric("Orçamentos Gerados", len(df_orc.dropna(subset=[df_orc.columns[0]])))
+            st.metric("Orçamentos Gerados", len(df_orc.dropna(subset=[df_orc.columns[0]])) if not df_orc.empty else 0)
             
         st.markdown("---")
         st.info("💡 **Dica:** Utilize o menu lateral para navegar entre as abas e gerenciar o seu fluxo comercial.")
